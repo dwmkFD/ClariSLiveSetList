@@ -1,17 +1,627 @@
 ﻿@inherits LayoutComponentBase
 
+<MudThemeProvider />
+<MudPopoverProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
 <div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
     <main>
-        <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-        </div>
+        <MudLayout>
+            <MudMainContent Class="pt-16 px-16">
 
-        <article class="content px-4">
-            @Body
-        </article>
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudGrid Spacing="2" Justify="Justify.Center">
+                            <MudItem lg="7" xs="7" Style="background-color:lightpink">
+                                <!--                                <MudText Typo="Typo.h6" Class="text-white">ClariSライブ セットリスト一覧</MudText>-->
+                                <MudText Typo="Typo.h6">ClariSライブ セットリスト一覧</MudText>
+                            </MudItem>
+                            <MudItem lg="5" xs="5" Style="background-color:lightpink"><MudSpacer></MudSpacer></MudItem>
+                            <MudItem lg="5" xs="5"><MudSpacer></MudSpacer></MudItem>
+                            <MudItem lg="7" xs="7">
+                                <MudAutocomplete T="string" Label="曲名で検索" SearchFunc="@search_title" CoerceText="false" Variant="Variant.Outlined" Margin="Margin.Dense" ValueChanged="OnTitleSelected" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudItem>
+
+                    <MudItem xs="3">
+                        <LiveList OnLiveDataChangeEventCallback="@( (x) => CreateSetList( x ) )" />
+                    </MudItem>
+                    <MudItem xs="9">
+                        <MudText>@setlist_all</MudText>
+                    </MudItem>
+                </MudGrid>
+
+                <MudContainer Class="mt-6">
+                    <MudAlert Severity="Severity.Success" Class="mt-16">Text inside MudContainer</MudAlert>
+                </MudContainer>
+ <!--           @Body -->
+            </MudMainContent>
+        </MudLayout>
     </main>
 </div>
+
+@code {
+    private List<string> TitleList = new List<string>();
+    private Dictionary<string, Tuple<string, string >> TranslateList = new Dictionary<string, Tuple<string, string>>();
+
+    private string setlist_all = "";
+    private ClariSLiveSetList.Shared.Models.LiveData? livedata = null;
+
+    private void OnTitleSelected(string name) // 曲名が入力(検索)された
+    {
+    }
+
+    private void OnLiveTitleSelected( string title ) // ライブタイトルが選択された
+    {
+    }
+
+    private void CreateSetList(List<ClariSLiveSetList.Shared.Models.LiveData> data)
+    {
+        string tmp = "";
+        foreach( var l in data )
+        {
+            foreach( var sl in l.SetList )
+            {
+                tmp += sl;
+            }
+        }
+        setlist_all = tmp;
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        InitializeTitleList();
+
+        // ローマ字→カタカナ変換辞書
+        TranslateList["a"] = new Tuple<string, string>("ア", "あ");
+        TranslateList["ba"] = new Tuple<string, string>("バ", "ば");
+        TranslateList["be"] = new Tuple<string, string>("ベ", "べ");
+        TranslateList["bi"] = new Tuple<string, string>("ビ", "び");
+        TranslateList["bo"] = new Tuple<string, string>("ボ", "ぼ");
+        TranslateList["bu"] = new Tuple<string, string>("ブ", "ぶ");
+        TranslateList["bya"] = new Tuple<string, string>("ビャ", "びゃ");
+        TranslateList["bye"] = new Tuple<string, string>("ビェ", "びぇ");
+        TranslateList["byi"] = new Tuple<string, string>("ビィ", "びぃ");
+        TranslateList["byo"] = new Tuple<string, string>("ビョ", "びょ");
+        TranslateList["byu"] = new Tuple<string, string>("ビュ", "びゅ");
+        TranslateList["ca"] = new Tuple<string, string>("カ", "か");
+        TranslateList["ce"] = new Tuple<string, string>("セ", "せ");
+        TranslateList["cha"] = new Tuple<string, string>("チャ", "ちゃ");
+        TranslateList["che"] = new Tuple<string, string>("チェ", "ちぇ");
+        TranslateList["chi"] = new Tuple<string, string>("チ", "ち");
+        TranslateList["cho"] = new Tuple<string, string>("チョ", "ちょ");
+        TranslateList["chu"] = new Tuple<string, string>("チュ", "ちゅ");
+        TranslateList["ci"] = new Tuple<string, string>("シ", "し");
+        TranslateList["co"] = new Tuple<string, string>("コ", "こ");
+        TranslateList["cu"] = new Tuple<string, string>("ク", "く");
+        TranslateList["cya"] = new Tuple<string, string>("チャ", "ちゃ");
+        TranslateList["cye"] = new Tuple<string, string>("チェ", "ちぇ");
+        TranslateList["cyi"] = new Tuple<string, string>("チィ", "ちぃ");
+        TranslateList["cyo"] = new Tuple<string, string>("チョ", "ちょ");
+        TranslateList["cyu"] = new Tuple<string, string>("チュ", "ちゅ");
+        TranslateList["da"] = new Tuple<string, string>("ダ", "だ");
+        TranslateList["de"] = new Tuple<string, string>("デ", "で");
+        TranslateList["dha"] = new Tuple<string, string>("デャ", "でゃ");
+        TranslateList["dhe"] = new Tuple<string, string>("デェ", "でぇ");
+        TranslateList["dhi"] = new Tuple<string, string>("ディ", "でぃ");
+        TranslateList["dho"] = new Tuple<string, string>("デョ", "でょ");
+        TranslateList["dhu"] = new Tuple<string, string>("デュ", "でゅ");
+        TranslateList["di"] = new Tuple<string, string>("ヂ", "ぢ");
+        TranslateList["do"] = new Tuple<string, string>("ド", "ど");
+        TranslateList["du"] = new Tuple<string, string>("ヅ", "づ");
+        TranslateList["dya"] = new Tuple<string, string>("ヂャ", "ぢゃ");
+        TranslateList["dye"] = new Tuple<string, string>("ヂェ", "ぢぇ");
+        TranslateList["dyi"] = new Tuple<string, string>("ヂィ", "ぢぃ");
+        TranslateList["dyo"] = new Tuple<string, string>("ヂョ", "ぢょ");
+        TranslateList["dyu"] = new Tuple<string, string>("デュ", "ぢゅ");
+        TranslateList["e"] = new Tuple<string, string>("エ", "え");
+        TranslateList["fa"] = new Tuple<string, string>("ファ", "ふぁ");
+        TranslateList["fe"] = new Tuple<string, string>("フェ", "ふぇ");
+        TranslateList["fi"] = new Tuple<string, string>("フィ", "ふぃ");
+        TranslateList["fo"] = new Tuple<string, string>("フォ", "ふぉ");
+        TranslateList["fu"] = new Tuple<string, string>("フ", "ふ");
+        TranslateList["ga"] = new Tuple<string, string>("ガ", "が");
+        TranslateList["ge"] = new Tuple<string, string>("ゲ", "げ");
+        TranslateList["gi"] = new Tuple<string, string>("ギ", "ぎ");
+        TranslateList["go"] = new Tuple<string, string>("ゴ", "ご");
+        TranslateList["gu"] = new Tuple<string, string>("グ", "ぐ");
+        TranslateList["gwa"] = new Tuple<string, string>("グァ", "ぐぁ");
+        TranslateList["gwe"] = new Tuple<string, string>("グェ", "ぐぇ");
+        TranslateList["gwi"] = new Tuple<string, string>("グィ", "ぐぃ");
+        TranslateList["gwo"] = new Tuple<string, string>("グォ", "ぐぉ");
+        TranslateList["gwu"] = new Tuple<string, string>("グ", "ぐ");
+        TranslateList["gya"] = new Tuple<string, string>("ギャ", "ぎゃ");
+        TranslateList["gye"] = new Tuple<string, string>("ギェ", "ぎぇ");
+        TranslateList["gyi"] = new Tuple<string, string>("ギィ", "ぎぃ");
+        TranslateList["gyo"] = new Tuple<string, string>("ギョ", "ぎょ");
+        TranslateList["gyu"] = new Tuple<string, string>("ギュ", "ぎゅ");
+        TranslateList["ha"] = new Tuple<string, string>("ハ", "は");
+        TranslateList["he"] = new Tuple<string, string>("ヘ", "へ");
+        TranslateList["hi"] = new Tuple<string, string>("ヒ", "ひ");
+        TranslateList["ho"] = new Tuple<string, string>("ホ", "ほ");
+        TranslateList["hu"] = new Tuple<string, string>("フ", "ふ");
+        TranslateList["hya"] = new Tuple<string, string>("ヒャ", "ひゃ");
+        TranslateList["hye"] = new Tuple<string, string>("ヒェ", "ひぇ");
+        TranslateList["hyi"] = new Tuple<string, string>("ヒィ", "ひぃ");
+        TranslateList["hyo"] = new Tuple<string, string>("ヒョ", "ひょ");
+        TranslateList["hyu"] = new Tuple<string, string>("ヒュ", "ひゅ");
+        TranslateList["i"] = new Tuple<string, string>("イ", "い");
+        TranslateList["ja"] = new Tuple<string, string>("ジャ", "じゃ");
+        TranslateList["je"] = new Tuple<string, string>("ジェ", "じぇ");
+        TranslateList["ji"] = new Tuple<string, string>("ジ", "じ");
+        TranslateList["jo"] = new Tuple<string, string>("ジョ", "じょ");
+        TranslateList["ju"] = new Tuple<string, string>("ジュ", "じゅ");
+        TranslateList["jya"] = new Tuple<string, string>("ジャ", "じゃ");
+        TranslateList["jye"] = new Tuple<string, string>("ジェ", "じぇ");
+        TranslateList["jyi"] = new Tuple<string, string>("ジィ", "じぃ");
+        TranslateList["jyo"] = new Tuple<string, string>("ジョ", "じょ");
+        TranslateList["jyu"] = new Tuple<string, string>("ジュ", "じゅ");
+        TranslateList["ka"] = new Tuple<string, string>("カ", "か");
+        TranslateList["ke"] = new Tuple<string, string>("ケ", "け");
+        TranslateList["ki"] = new Tuple<string, string>("キ", "き");
+        TranslateList["ko"] = new Tuple<string, string>("コ", "こ");
+        TranslateList["ku"] = new Tuple<string, string>("ク", "く");
+        TranslateList["kwa"] = new Tuple<string, string>("クヮ", "くぁ");
+        TranslateList["kwe"] = new Tuple<string, string>("クェ", "くぇ");
+        TranslateList["kwi"] = new Tuple<string, string>("クィ", "くぃ");
+        TranslateList["kwo"] = new Tuple<string, string>("クォ", "くぉ");
+        TranslateList["kwu"] = new Tuple<string, string>("ク", "く");
+        TranslateList["kya"] = new Tuple<string, string>("キャ", "きゃ");
+        TranslateList["kye"] = new Tuple<string, string>("キェ", "きぇ");
+        TranslateList["kyi"] = new Tuple<string, string>("キィ", "きぃ");
+        TranslateList["kyo"] = new Tuple<string, string>("キョ", "きょ");
+        TranslateList["kyu"] = new Tuple<string, string>("キュ", "きゅ");
+        TranslateList["la"] = new Tuple<string, string>("ァ", "ぁ");
+        TranslateList["le"] = new Tuple<string, string>("ェ", "ぇ");
+        TranslateList["li"] = new Tuple<string, string>("ィ", "ぃ");
+        TranslateList["lo"] = new Tuple<string, string>("ォ", "ぉ");
+        TranslateList["lu"] = new Tuple<string, string>("ゥ", "ぅ");
+        TranslateList["lwa"] = new Tuple<string, string>("ヮ", "ゎ");
+        TranslateList["lya"] = new Tuple<string, string>("ャ", "ゃ");
+        TranslateList["lye"] = new Tuple<string, string>("ェ", "ぇ");
+        TranslateList["lyi"] = new Tuple<string, string>("ィ", "ぃ");
+        TranslateList["lyo"] = new Tuple<string, string>("ョ", "ょ");
+        TranslateList["lyu"] = new Tuple<string, string>("ュ", "ゅ");
+        TranslateList["ma"] = new Tuple<string, string>("マ", "ま");
+        TranslateList["me"] = new Tuple<string, string>("メ", "め");
+        TranslateList["mi"] = new Tuple<string, string>("ミ", "み");
+        TranslateList["mo"] = new Tuple<string, string>("モ", "も");
+        TranslateList["mu"] = new Tuple<string, string>("ム", "む");
+        TranslateList["mya"] = new Tuple<string, string>("ミャ", "みゃ");
+        TranslateList["mye"] = new Tuple<string, string>("ミェ", "みぇ");
+        TranslateList["myi"] = new Tuple<string, string>("ミィ", "みぃ");
+        TranslateList["myo"] = new Tuple<string, string>("ミョ", "みょ");
+        TranslateList["myu"] = new Tuple<string, string>("ミュ", "みゅ");
+        TranslateList["na"] = new Tuple<string, string>("ナ", "な");
+        TranslateList["ne"] = new Tuple<string, string>("ネ", "ね");
+        TranslateList["ni"] = new Tuple<string, string>("ニ", "に");
+        TranslateList["nn"] = new Tuple<string, string>("ン", "ん");
+        TranslateList["no"] = new Tuple<string, string>("ノ", "の");
+        TranslateList["nu"] = new Tuple<string, string>("ヌ", "ぬ");
+        TranslateList["nya"] = new Tuple<string, string>("ニャ", "にゃ");
+        TranslateList["nye"] = new Tuple<string, string>("ニェ", "にぇ");
+        TranslateList["nyi"] = new Tuple<string, string>("ニィ", "にぃ");
+        TranslateList["nyo"] = new Tuple<string, string>("ニョ", "にょ");
+        TranslateList["nyu"] = new Tuple<string, string>("ニュ", "にゅ");
+        TranslateList["o"] = new Tuple<string, string>("オ", "お");
+        TranslateList["pa"] = new Tuple<string, string>("パ", "ぱ");
+        TranslateList["pe"] = new Tuple<string, string>("ペ", "ぺ");
+        TranslateList["pi"] = new Tuple<string, string>("ピ", "ぴ");
+        TranslateList["po"] = new Tuple<string, string>("ポ", "ぽ");
+        TranslateList["pu"] = new Tuple<string, string>("プ", "ぷ");
+        TranslateList["pya"] = new Tuple<string, string>("ピャ", "ぴゃ");
+        TranslateList["pye"] = new Tuple<string, string>("ピェ", "ぴぇ");
+        TranslateList["pyi"] = new Tuple<string, string>("ピィ", "ぴぃ");
+        TranslateList["pyo"] = new Tuple<string, string>("ピョ", "ぴょ");
+        TranslateList["pyu"] = new Tuple<string, string>("ピュ", "ぴゅ");
+        TranslateList["qa"] = new Tuple<string, string>("クァ", "くぁ");
+        TranslateList["qe"] = new Tuple<string, string>("クェ", "くぇ");
+        TranslateList["qi"] = new Tuple<string, string>("クィ", "くぃ");
+        TranslateList["qo"] = new Tuple<string, string>("クォ", "くぉ");
+        TranslateList["qu"] = new Tuple<string, string>("ク", "く");
+        TranslateList["qya"] = new Tuple<string, string>("クャ", "くゃ");
+        TranslateList["qye"] = new Tuple<string, string>("クェ", "くぇ");
+        TranslateList["qyi"] = new Tuple<string, string>("クィ", "くぃ");
+        TranslateList["qyo"] = new Tuple<string, string>("クョ", "くょ");
+        TranslateList["qyu"] = new Tuple<string, string>("クュ", "くゅ");
+        TranslateList["ra"] = new Tuple<string, string>("ラ", "ら");
+        TranslateList["re"] = new Tuple<string, string>("レ", "れ");
+        TranslateList["ri"] = new Tuple<string, string>("リ", "り");
+        TranslateList["ro"] = new Tuple<string, string>("ロ", "ろ");
+        TranslateList["ru"] = new Tuple<string, string>("ル", "る");
+        TranslateList["rya"] = new Tuple<string, string>("リャ", "りゃ");
+        TranslateList["rye"] = new Tuple<string, string>("リェ", "りぇ");
+        TranslateList["ryi"] = new Tuple<string, string>("リィ", "りぃ");
+        TranslateList["ryo"] = new Tuple<string, string>("リョ", "りょ");
+        TranslateList["ryu"] = new Tuple<string, string>("リュ", "りゅ");
+        TranslateList["sa"] = new Tuple<string, string>("サ", "さ");
+        TranslateList["se"] = new Tuple<string, string>("セ", "せ");
+        TranslateList["sha"] = new Tuple<string, string>("シャ", "しゃ");
+        TranslateList["she"] = new Tuple<string, string>("シェ", "しぇ");
+        TranslateList["shi"] = new Tuple<string, string>("シ", "し");
+        TranslateList["sho"] = new Tuple<string, string>("ショ", "しょ");
+        TranslateList["shu"] = new Tuple<string, string>("シュ", "しゅ");
+        TranslateList["si"] = new Tuple<string, string>("シ", "し");
+        TranslateList["so"] = new Tuple<string, string>("ソ", "そ");
+        TranslateList["su"] = new Tuple<string, string>("ス", "す");
+        TranslateList["sya"] = new Tuple<string, string>("シャ", "しゃ");
+        TranslateList["sye"] = new Tuple<string, string>("シェ", "しぇ");
+        TranslateList["syi"] = new Tuple<string, string>("シィ", "しぃ");
+        TranslateList["syo"] = new Tuple<string, string>("ショ", "しょ");
+        TranslateList["syu"] = new Tuple<string, string>("シュ", "しゅ");
+        TranslateList["ta"] = new Tuple<string, string>("タ", "た");
+        TranslateList["te"] = new Tuple<string, string>("テ", "て");
+        TranslateList["tha"] = new Tuple<string, string>("テャ", "てゃ");
+        TranslateList["the"] = new Tuple<string, string>("テェ", "てぇ");
+        TranslateList["thi"] = new Tuple<string, string>("ティ", "てぃ");
+        TranslateList["tho"] = new Tuple<string, string>("テョ", "てょ");
+        TranslateList["thu"] = new Tuple<string, string>("テュ", "てゅ");
+        TranslateList["ti"] = new Tuple<string, string>("チ", "ち");
+        TranslateList["to"] = new Tuple<string, string>("ト", "と");
+        TranslateList["tsa"] = new Tuple<string, string>("ツァ", "つぁ");
+        TranslateList["tse"] = new Tuple<string, string>("ツェ", "つぇ");
+        TranslateList["tsi"] = new Tuple<string, string>("ツィ", "てぃ");
+        TranslateList["tsu"] = new Tuple<string, string>("ツ", "つ");
+        TranslateList["tu"] = new Tuple<string, string>("ツ", "つ");
+        TranslateList["tso"] = new Tuple<string, string>("ツォ", "つぉ");
+        TranslateList["tya"] = new Tuple<string, string>("チャ", "ちゃ");
+        TranslateList["tye"] = new Tuple<string, string>("チェ", "ちぇ");
+        TranslateList["tyi"] = new Tuple<string, string>("チィ", "ちぃ");
+        TranslateList["tyo"] = new Tuple<string, string>("チョ", "ちょ");
+        TranslateList["tyu"] = new Tuple<string, string>("チュ", "ちゅ");
+        TranslateList["u"] = new Tuple<string, string>("ウ", "う");
+        TranslateList["va"] = new Tuple<string, string>("ヴァ", "ゔぁ");
+        TranslateList["ve"] = new Tuple<string, string>("ヴェ", "ゔぇ");
+        TranslateList["vi"] = new Tuple<string, string>("ヴィ", "ゔぃ");
+        TranslateList["vo"] = new Tuple<string, string>("ヴォ", "ゔぉ");
+        TranslateList["vu"] = new Tuple<string, string>("ヴ", "ゔ");
+        TranslateList["wa"] = new Tuple<string, string>("ワ", "わ");
+        TranslateList["we"] = new Tuple<string, string>("ウェ", "うぇ");
+        TranslateList["wi"] = new Tuple<string, string>("ウィ", "うぃ");
+        TranslateList["wo"] = new Tuple<string, string>("ヲ", "を");
+        TranslateList["wu"] = new Tuple<string, string>("ウ", "う");
+        TranslateList["xa"] = new Tuple<string, string>("ァ", "ぁ");
+        TranslateList["xe"] = new Tuple<string, string>("ェ", "ぇ");
+        TranslateList["xi"] = new Tuple<string, string>("ィ", "ぃ");
+        TranslateList["xo"] = new Tuple<string, string>("ォ", "ぉ");
+        TranslateList["xn"] = new Tuple<string, string>("ン", "ん");
+        TranslateList["xtu"] = new Tuple<string, string>("ッ", "っ");
+        TranslateList["xtsu"] = new Tuple<string, string>("ッ", "っ");
+        TranslateList["xu"] = new Tuple<string, string>("ゥ", "ぅ");
+        TranslateList["xwa"] = new Tuple<string, string>("ヮ", "ゎ");
+        TranslateList["xya"] = new Tuple<string, string>("ャ", "ゃ");
+        TranslateList["xye"] = new Tuple<string, string>("ェ", "ぇ");
+        TranslateList["xyi"] = new Tuple<string, string>("ィ", "ぃ");
+        TranslateList["xyo"] = new Tuple<string, string>("ョ", "ょ");
+        TranslateList["xyu"] = new Tuple<string, string>("ュ", "ゅ");
+        TranslateList["ya"] = new Tuple<string, string>("ヤ", "や");
+        TranslateList["ye"] = new Tuple<string, string>("イェ", "いぇ");
+        TranslateList["yi"] = new Tuple<string, string>("イ", "い");
+        TranslateList["yo"] = new Tuple<string, string>("ヨ", "よ");
+        TranslateList["yu"] = new Tuple<string, string>("ユ", "ゆ");
+        TranslateList["za"] = new Tuple<string, string>("ザ", "ざ");
+        TranslateList["ze"] = new Tuple<string, string>("ゼ", "ぜ");
+        TranslateList["zi"] = new Tuple<string, string>("ジ", "じ");
+        TranslateList["zo"] = new Tuple<string, string>("ゾ", "ぞ");
+        TranslateList["zu"] = new Tuple<string, string>("ズ", "ず");
+        TranslateList["zya"] = new Tuple<string, string>("ジャ", "じゃ");
+        TranslateList["zye"] = new Tuple<string, string>("ジェ", "じぇ");
+        TranslateList["zyi"] = new Tuple<string, string>("ジィ", "じぃ");
+        TranslateList["zyo"] = new Tuple<string, string>("ジョ", "じょ");
+        TranslateList["zyu"] = new Tuple<string, string>("ジュ", "じゅ");
+        TranslateList["-"] = new Tuple<string, string>("ー", "");
+    }
+
+    private async Task<IEnumerable<string>> search_title(string str, CancellationToken token )
+    {
+        if (string.IsNullOrEmpty(str))
+            return (TitleList);
+
+        List<string> ls = new List<string>();
+
+        // まずはアルファベットで探す
+        ls.AddRange(TitleList.Where(x => x.ToLower().StartsWith(str)).ToList());
+
+        // カタカナで探す
+        var s = trans_kana(str, 0);
+        s = s.Distinct().ToList();
+        foreach (var ss in s)
+        {
+            ls.AddRange(TitleList.Where(x => x.StartsWith(ss)).ToList());
+        }
+
+        // ひらがなで探す
+        s = trans_kana(str, 1);
+        s = s.Distinct().ToList();
+        foreach (var ss in s)
+        {
+            ls.AddRange(TitleList.Where(x => x.StartsWith(ss)).ToList());
+        }
+        ls = ls.Distinct().ToList();
+
+        return (ls);
+    }
+
+    private List<string> trans_kana(string in_str, int index ) // index = 0 のときカタカナ、1のときひらがな
+    {
+        List<string> result = new List<string>();
+        bool finish = true;
+        string str = in_str.ToLower();
+
+        // まず1～3文字のアルファベットの組を先頭から順番にカタカナに変換する
+        string res = "";
+        for (int i = 0; i < str.Length; i++)
+        {
+            string tmp = "";
+            if (str.Length - i >= 3)
+            {
+                // 3文字のパターンから先に調べた方が良さそう
+                if (TranslateList.ContainsKey(str.Substring(i, 3)))
+                {
+                    var x = TranslateList[str.Substring(i, 3)];
+                    tmp = ( index == 0 ? x.Item1 : x.Item2 );
+                    res += tmp;
+                    i += 2;
+                    continue;
+                }
+            }
+            if (str.Length - i >= 2)
+            {
+                if (TranslateList.ContainsKey(str.Substring(i, 2)))
+                {
+                    var x = TranslateList[str.Substring(i, 2)];
+                    tmp = ( index == 0 ? x.Item1 : x.Item2 );
+                    res += tmp;
+                    ++i; // 2文字変換してるので次へ
+                    continue;
+                }
+                else
+                {
+                    if (i < str.Length)
+                    {
+                        if (str[i] == str[i + 1])
+                        {
+                            if (str[i] != 'a' && str[i] != 'i' && str[i] != 'u' && str[i] != 'e' && str[i] != 'o')
+                            {
+                                // 母音が2つ続いた場合は"ッ"への変換はしない
+                                res += "ッ";
+                                continue; // 子音を一つ残すので i をインクリメントせずに次へ
+                            }
+                        }
+                        else if (str[i] == 'n')
+                        {
+                            if (str[i] != 'a' && str[i] != 'i' && str[i] != 'u' && str[i] != 'e' && str[i] != 'o')
+                            {
+                                // nの次が母音じゃなかった場合、nを"ン"に変換する
+                                res += "ン";
+                                continue; // 次の子音は残すので i をインクリメントせずに次へ
+                            }
+                        }
+                    }
+                }
+            }
+            if (str.Length - i >= 1)
+            {
+                if (TranslateList.ContainsKey(str.Substring(i, 1)))
+                {
+                    // 1文字(母音とンとー)の変換ができるか？
+                    // -> ンをnだけから変換するには次が子音かどうかの判定が必要で面倒なので後回し
+                    var x = TranslateList[str.Substring(i, 1)];
+                    tmp = (index == 0 ? x.Item1 : x.Item2);
+                    res += tmp;
+                    continue;
+                }
+                else
+                {
+                    if (str[i] >= 'a' && str[i] <= 'z')
+                    {
+                        finish = false;
+                        break; // 1文字しかなく、さらに変換にも失敗してるなら、そのまま最終フェーズへ進む
+                    }
+                    else
+                    {
+                        // アルファベットじゃない場合はそのままresにくっつける
+                        // -> フシギb みたいな入力から フシギバ/フシギビ/...を検索したい
+                        res += str[i];
+                    }
+                }
+            }
+        }
+
+        // 変換から漏れた最後の1文字からあり得る文字の候補を生成する
+        if (finish == false && char.IsLetter(str.Last()))
+        {
+            // 最後の1文字がアルファベット(つまり変換漏れがある)
+            var tmpL = TranslateList.Where(x => x.Key.StartsWith(str.Last())).ToList();
+            foreach (var v in tmpL)
+            {
+                // 変換候補分だけ、それまでの変換結果に付け加えてリストを作る
+                // 例：マリルr -> マリルラ, マリルリ, マリルル, マリルレ, マリルロ
+                result.Add(res + v.Value.Item1);
+            }
+        }
+        else
+        {
+            result.Add(res); // 全部変換できた(もしくは空っぽ)なら、それだけリストに詰めて返す
+        }
+
+        return (result);
+    }
+
+    protected void InitializeTitleList()
+    {
+        TitleList.Add("コネクト");
+        TitleList.Add("ヒトリゴト");
+        TitleList.Add("border");
+        TitleList.Add("カラフル");
+        TitleList.Add("ナイショの話");
+        TitleList.Add("CLICK");
+        TitleList.Add("SHIORI");
+        TitleList.Add("STEP");
+        TitleList.Add("シニカルサスペンス");
+        TitleList.Add("reunion");
+        TitleList.Add("Prism");
+        TitleList.Add("again");
+        TitleList.Add("ALIVE");
+        TitleList.Add("irony");
+        TitleList.Add("アネモネ");
+        TitleList.Add("ルミナス");
+        TitleList.Add("Gravity");
+        TitleList.Add("PRIMALove");
+        TitleList.Add("nexus");
+        TitleList.Add("blossom");
+        TitleList.Add("ホログラム");
+        TitleList.Add("pastel");
+        TitleList.Add("Butterfly Regret");
+        TitleList.Add("Fairy Party");
+        TitleList.Add("Clear Sky");
+        TitleList.Add("眠り姫");
+        TitleList.Add("clever");
+        TitleList.Add("Wake Up");
+        TitleList.Add("with you");
+        TitleList.Add("ハルラ");
+        TitleList.Add("恋磁石");
+        TitleList.Add("eternally");
+        TitleList.Add("YUMENOKI");
+        TitleList.Add("カイト");
+        TitleList.Add("仮面ジュブナイル");
+        TitleList.Add("パラレルワープ");
+        TitleList.Add("1/f");
+        TitleList.Add("Last Squall");
+        TitleList.Add("ウソツキ");
+        TitleList.Add("Pieces");
+        TitleList.Add("新世界ビーナス");
+        TitleList.Add("CheerS");
+        TitleList.Add("グラスプ");
+        TitleList.Add("シグナル");
+        TitleList.Add("Freaky Candy");
+        TitleList.Add("graduation");
+        TitleList.Add("Love is Mystery");
+        TitleList.Add("treasure");
+        TitleList.Add("Wonder Night");
+        TitleList.Add("アンダンテ");
+        TitleList.Add("サクラ・インカーネーション");
+        TitleList.Add("トワイライト");
+        TitleList.Add("擬態");
+        TitleList.Add("未来航路");
+        TitleList.Add("distance");
+        TitleList.Add("Overture");
+        TitleList.Add("Time Tunnel");
+        TitleList.Add("TRAVEL");
+        TitleList.Add("ねがい");
+        TitleList.Add("陽だまり");
+        TitleList.Add("本当は");
+        TitleList.Add("recall");
+        TitleList.Add("Reflect");
+        TitleList.Add("サヨナラは言わない");
+        TitleList.Add("ひらひら ひらら");
+        TitleList.Add("RESTART");
+        TitleList.Add("Blue Canvas");
+        TitleList.Add("PRECIOUS");
+        TitleList.Add("ふぉりら");
+        TitleList.Add("ミントガム");
+        TitleList.Add("一期一会");
+        TitleList.Add("淋しい熱帯魚");
+        TitleList.Add("SECRET");
+        TitleList.Add("Summer Delay");
+        TitleList.Add("プロミス");
+        TitleList.Add("冬空花火");
+        TitleList.Add("ダイアリー");
+        TitleList.Add("Sweet Holic");
+        TitleList.Add("White Love");
+        TitleList.Add("アイデンティティ");
+        TitleList.Add("アサガオ");
+        TitleList.Add("アリシア");
+        TitleList.Add("イロドリ");
+        TitleList.Add("ひとつだけ");
+        TitleList.Add("君色");
+        TitleList.Add("Don't cry");
+        TitleList.Add("Orange");
+        TitleList.Add("Collage");
+        TitleList.Add("HANABI");
+        TitleList.Add("Brave");
+        TitleList.Add("Bye-Bye Butterfly");
+        TitleList.Add("Cloudy");
+        TitleList.Add("Fight!!");
+        TitleList.Add("Masquerade");
+        TitleList.Add("Mermaid");
+        TitleList.Add("missing you");
+        TitleList.Add("ORION");
+        TitleList.Add("Starry");
+        TitleList.Add("Tik Tak");
+        TitleList.Add("Twinkle Twinkle");
+        TitleList.Add("WHITE BREATH");
+        TitleList.Add("アワイ オモイ");
+        TitleList.Add("オルゴール");
+        TitleList.Add("ケアレス");
+        TitleList.Add("コイセカイ");
+        TitleList.Add("サイレント・イヴ");
+        TitleList.Add("スノーライト");
+        TitleList.Add("トパーズ");
+        TitleList.Add("ユニゾン");
+        TitleList.Add("ループ");
+        TitleList.Add("幻想恋慕");
+        TitleList.Add("桜咲く");
+        TitleList.Add("赤いスイートピー");
+        TitleList.Add("瞳の中のローレライ");
+        TitleList.Add("忘れてもいいよ");
+        TitleList.Add("flowery");
+        TitleList.Add("キミとふたり");
+        TitleList.Add("タッチ");
+        TitleList.Add("このiは虚数");
+        TitleList.Add("メモリー");
+        TitleList.Add("It's showtime!!");
+        TitleList.Add("I'm in love");
+        TitleList.Add("second story");
+        TitleList.Add("Surely");
+        TitleList.Add("コイノミ");
+        TitleList.Add("ドライフラワー");
+        TitleList.Add("恋待かぐや");
+        TitleList.Add("Diamonds");
+        TitleList.Add("secret base ～君がくれたもの～");
+        TitleList.Add("恋のバカンス");
+        TitleList.Add("もういちど ルミナス");
+        TitleList.Add("Drawing");
+        TitleList.Add("DROP");
+        TitleList.Add("Friends");
+        TitleList.Add("Neo Moon");
+        TitleList.Add("rainy day");
+        TitleList.Add("sakura");
+        TitleList.Add("アイヲウタエ");
+        TitleList.Add("アナタニFIT");
+        TitleList.Add("ココロの引力");
+        TitleList.Add("シルシ");
+        TitleList.Add("泣かないよ");
+        TitleList.Add("君の知らない物語");
+        TitleList.Add("君の夢を見よう");
+        TitleList.Add("水色クラゲ");
+        TitleList.Add("a moment");
+        TitleList.Add("Dreamin'");
+        TitleList.Add("Entr'acte I");
+        TitleList.Add("Entr'acte II");
+        TitleList.Add("Entr'acte III");
+        TitleList.Add("Entr'acte IV");
+        TitleList.Add("Introduction de Parfaitone");
+        TitleList.Add("NEN・DO・ROIDO");
+        TitleList.Add("next to you");
+        TitleList.Add("Time");
+        TitleList.Add("zutto");
+        TitleList.Add("かくれんぼ");
+        TitleList.Add("さよならメモリーズ");
+        TitleList.Add("セピア");
+        TitleList.Add("ドリームワールド");
+        TitleList.Add("はいからさんが通る");
+        TitleList.Add("君がいると");
+        TitleList.Add("明日、春が来たら");
+        TitleList.Add("秋のグラディエント");
+        TitleList.Add("風は秋色");
+        TitleList.Add("木枯らしに抱かれて");
+        TitleList.Add("思秋期");
+        TitleList.Add("月のしずく");
+        TitleList.Add("Evergreen");
+    }
+}

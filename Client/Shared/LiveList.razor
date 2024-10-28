@@ -1,0 +1,64 @@
+    <main>
+        <MudGrid Spacing="2" Justify="Justify.Center">
+            <MudItem lg="12" xs="12">
+                <MudText Typo="Typo.h6" Style="background-color:lightgreen">ClariSライブタイトル一覧</MudText>
+            </MudItem>
+        </MudGrid>
+
+        <MudTreeView T="string" @bind-SelectedValue="SelectedValue">
+            <MudTreeViewItem Value='"ClariS 1st Live ～扉の先へ～"' OnClick="OnClickLiveTitle">
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 1st Tour ～夢の1ページ…～"'>
+                <MudTreeViewItem Value='"test1"' />
+                <MudTreeViewItem Value='"test2"' />
+                <MudTreeViewItem Value='"test3"' />
+                <MudTreeViewItem Value='"test4"' />
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 1st 武道館コンサート ～2つの仮面と失われた太陽～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 2nd HALL CONCERT in パシフィコ横浜国立大ホール ～さよならの先へ… はじまりのメロディ～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 3rd HALL CONCERT in 舞浜アンフィシアター ♪over the rainbow ～虹の彼方に～♫"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 2nd Zepp Tour in 東名阪 ～Best of ClariS～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 1st HALL CONCERT TOUR ～Fairy Party～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS LIVE Tour 2019 ～libero～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 10th Anniversary Precious LIVE ～Gift～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"Merry ClarismaS ～ひみつのサンタクロース～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS HALL CONCERT 2022 ～Twinkle Summer Dreams～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS HALL CONCERT 2022 WINTER ～Let’s Snow Parade!～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS Spring LIVE 2023 ～Neo Sparkle～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS Autumn Live 2023 ～Arcanum～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS SPRING TOUR 2024 ～Tinctura～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS Room Party ～Rhythm～"'>
+            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS AUTUMN TOUR 2024 ～Via Fortuna～"'>
+            </MudTreeViewItem>
+        </MudTreeView>
+    </main>
+
+@code {
+    [Parameter] public EventCallback<List<ClariSLiveSetList.Shared.Models.LiveData>> OnLiveDataChangeEventCallback { get; set; }
+
+    private ClariSLiveSetList.Shared.Models.LiveDataManager LiveManager = new ClariSLiveSetList.Shared.Models.LiveDataManager();
+    string SelectedValue = "";
+
+    private void OnClickLiveTitle()
+    {
+        List<ClariSLiveSetList.Shared.Models.LiveData>? livedata
+        = LiveManager.GetLiveData(SelectedValue);
+        OnLiveDataChangeEventCallback.InvokeAsync(livedata);
+    }
+}
