@@ -26,17 +26,33 @@
                     </MudItem>
 
                     <MudItem xs="3">
-                        <LiveList OnLiveDataChangeEventCallback="@( (x) => CreateSetList( x ) )" />
+                        <LiveList OnLiveDataChangeEventCallback="@( (x) => CreateSetList( x ) )" LiveManager="LiveManager" />
                     </MudItem>
                     <MudItem xs="9">
                         <MudText>@setlist_all</MudText>
+                        <MudSimpleTable>
+                            <thead>
+                                @foreach( var h in headings )
+                                {
+                                    <th>@h</th>
+                                }
+                            </thead>
+                            <tbody>
+                                @foreach( var row in TitleList )
+                                {
+                                    
+                                }
+                            </tbody>
+                        </MudSimpleTable>
                     </MudItem>
                 </MudGrid>
 
+<!--
                 <MudContainer Class="mt-6">
                     <MudAlert Severity="Severity.Success" Class="mt-16">Text inside MudContainer</MudAlert>
                 </MudContainer>
- <!--           @Body -->
+                   @Body 
+-->
             </MudMainContent>
         </MudLayout>
     </main>
@@ -46,11 +62,15 @@
     private List<string> TitleList = new List<string>();
     private Dictionary<string, Tuple<string, string >> TranslateList = new Dictionary<string, Tuple<string, string>>();
 
-    private string setlist_all = "";
-    private ClariSLiveSetList.Shared.Models.LiveData? livedata = null;
+    ClariSLiveSetList.Shared.Models.LiveDataManager LiveManager = new ClariSLiveSetList.Shared.Models.LiveDataManager();
 
-    private void OnTitleSelected(string name) // 曲名が入力(検索)された
+    string[] headings = { "曲順", "曲名", "備考" };
+    private string setlist_all = "";
+    private List<ClariSLiveSetList.Shared.Models.LiveData>? livedata = null;
+
+    private void OnTitleSelected( string name ) // 曲名が入力(検索)された
     {
+        var data = LiveManager.GetLiveList( name ); // nameを歌ったライブを検索
     }
 
     private void OnLiveTitleSelected( string title ) // ライブタイトルが選択された
@@ -59,6 +79,7 @@
 
     private void CreateSetList(List<ClariSLiveSetList.Shared.Models.LiveData> data)
     {
+        livedata = data;
         string tmp = "";
         foreach( var l in data )
         {
@@ -539,7 +560,7 @@
         TitleList.Add("イロドリ");
         TitleList.Add("ひとつだけ");
         TitleList.Add("君色");
-        TitleList.Add("Don't cry");
+        TitleList.Add("Don’t cry");
         TitleList.Add("Orange");
         TitleList.Add("Collage");
         TitleList.Add("HANABI");
@@ -574,8 +595,8 @@
         TitleList.Add("タッチ");
         TitleList.Add("このiは虚数");
         TitleList.Add("メモリー");
-        TitleList.Add("It's showtime!!");
-        TitleList.Add("I'm in love");
+        TitleList.Add("It’s showtime!!");
+        TitleList.Add("I’m in love");
         TitleList.Add("second story");
         TitleList.Add("Surely");
         TitleList.Add("コイノミ");
@@ -600,11 +621,11 @@
         TitleList.Add("君の夢を見よう");
         TitleList.Add("水色クラゲ");
         TitleList.Add("a moment");
-        TitleList.Add("Dreamin'");
-        TitleList.Add("Entr'acte I");
-        TitleList.Add("Entr'acte II");
-        TitleList.Add("Entr'acte III");
-        TitleList.Add("Entr'acte IV");
+        TitleList.Add("Dreamin’");
+        TitleList.Add("Entr’acte I");
+        TitleList.Add("Entr’acte II");
+        TitleList.Add("Entr’acte III");
+        TitleList.Add("Entr’acte IV");
         TitleList.Add("Introduction de Parfaitone");
         TitleList.Add("NEN・DO・ROIDO");
         TitleList.Add("next to you");

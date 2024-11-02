@@ -6,18 +6,18 @@
         </MudGrid>
 
         <MudTreeView T="string" @bind-SelectedValue="SelectedValue">
-            <MudTreeViewItem Value='"ClariS 1st Live ～扉の先へ～"' OnClick="OnClickLiveTitle">
-            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 1st Live ～扉の先へ～"' OnClick="OnClickLiveTitle" />
             <MudTreeViewItem Value='"ClariS 1st Tour ～夢の1ページ…～"'>
-                <MudTreeViewItem Value='"test1"' />
-                <MudTreeViewItem Value='"test2"' />
-                <MudTreeViewItem Value='"test3"' />
-                <MudTreeViewItem Value='"test4"' />
+                <MudTreeViewItem Value='"Zepp Nagoya（愛知県）"' OnClick='@(args => OnClickLiveTitleWithPlace( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Nagoya（愛知県）" ))' />
+                <MudTreeViewItem Value='"Zepp Namba（大阪府）"' OnClick='@(args => OnClickLiveTitleWithPlace( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Namba（大阪府）" ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・1日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Tokyo（東京都）", new DateTime( 2016, 3, 19) ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・2日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Tokyo（東京都）", new DateTime( 2016, 3, 20) ))' />
             </MudTreeViewItem>
             <MudTreeViewItem Value='"ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～"'>
+                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～", "パシフィコ横浜国立大ホール（神奈川県）", new DateTime( 2016, 9, 17) ) )' />
+                <MudTreeViewItem Value='"2日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～", "パシフィコ横浜国立大ホール（神奈川県）", new DateTime( 2016, 9, 18) ) )' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS 1st 武道館コンサート ～2つの仮面と失われた太陽～"'>
-            </MudTreeViewItem>
+            <MudTreeViewItem Value='"ClariS 1st 武道館コンサート ～2つの仮面と失われた太陽～"' OnClick="OnClickLiveTitle" />
             <MudTreeViewItem Value='"ClariS 2nd HALL CONCERT in パシフィコ横浜国立大ホール ～さよならの先へ… はじまりのメロディ～"'>
             </MudTreeViewItem>
             <MudTreeViewItem Value='"ClariS 3rd HALL CONCERT in 舞浜アンフィシアター ♪over the rainbow ～虹の彼方に～♫"'>
@@ -51,14 +51,28 @@
 
 @code {
     [Parameter] public EventCallback<List<ClariSLiveSetList.Shared.Models.LiveData>> OnLiveDataChangeEventCallback { get; set; }
+    [Parameter] public ClariSLiveSetList.Shared.Models.LiveDataManager? LiveManager { get; set; }
 
-    private ClariSLiveSetList.Shared.Models.LiveDataManager LiveManager = new ClariSLiveSetList.Shared.Models.LiveDataManager();
     string SelectedValue = "";
 
     private void OnClickLiveTitle()
     {
         List<ClariSLiveSetList.Shared.Models.LiveData>? livedata
         = LiveManager.GetLiveData(SelectedValue);
+        OnLiveDataChangeEventCallback.InvokeAsync(livedata);
+    }
+
+    private void OnClickLiveTitleWithPlace( string title, string place )
+    {
+        List<ClariSLiveSetList.Shared.Models.LiveData>? livedata
+        = LiveManager.GetLiveData(title, place);
+        OnLiveDataChangeEventCallback.InvokeAsync(livedata);
+    }
+
+    private void OnClickLiveTitleWithPlaceAndTime( string title, string place, DateTime date )
+    {
+        List<ClariSLiveSetList.Shared.Models.LiveData>? livedata
+        = LiveManager.GetLiveData(title, place, date);
         OnLiveDataChangeEventCallback.InvokeAsync(livedata);
     }
 }
