@@ -7,44 +7,75 @@
 
         <MudTreeView T="string" @bind-SelectedValue="SelectedValue">
             <MudTreeViewItem Value='"ClariS 1st Live ～扉の先へ～"' OnClick="OnClickLiveTitle" />
-            <MudTreeViewItem Value='"ClariS 1st Tour ～夢の1ページ…～"'>
-                <MudTreeViewItem Value='"Zepp Nagoya（愛知県）"' OnClick='@(args => OnClickLiveTitleWithPlace( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Nagoya（愛知県）" ))' />
-                <MudTreeViewItem Value='"Zepp Namba（大阪府）"' OnClick='@(args => OnClickLiveTitleWithPlace( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Namba（大阪府）" ))' />
-                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・1日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Tokyo（東京都）", new DateTime( 2016, 3, 19) ))' />
-                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・2日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st Tour ～夢の1ページ…～", "Zepp Tokyo（東京都）", new DateTime( 2016, 3, 20) ))' />
+            <MudTreeViewItem Value='"ClariS 1st Tour ～夢の1ページ…～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"Zepp Nagoya（愛知県）"' OnClick='@(args => OnClickLiveTitleWithId( 2 ))' />
+                <MudTreeViewItem Value='"Zepp Namba（大阪府）"' OnClick='@(args => OnClickLiveTitleWithId( 3 ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・1日目"' OnClick='@(args => OnClickLiveTitleWithId( 4 ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・2日目"' OnClick='@(args => OnClickLiveTitleWithId( 5 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～"'>
-                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～", "パシフィコ横浜国立大ホール（神奈川県）", new DateTime( 2016, 9, 17) ) )' />
-                <MudTreeViewItem Value='"2日目"' OnClick='@(args => OnClickLiveTitleWithPlaceAndTime( "ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～", "パシフィコ横浜国立大ホール（神奈川県）", new DateTime( 2016, 9, 18) ) )' />
+            <MudTreeViewItem Value='"ClariS 1st HALL CONCERT in パシフィコ横浜国立大ホール ～星に願いを… 月に祈りを…～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithId( 6 ))' />
+                <MudTreeViewItem Value='"2日目"' OnClick='@(args => OnClickLiveTitleWithId( 7 ))' />
             </MudTreeViewItem>
             <MudTreeViewItem Value='"ClariS 1st 武道館コンサート ～2つの仮面と失われた太陽～"' OnClick="OnClickLiveTitle" />
-            <MudTreeViewItem Value='"ClariS 2nd HALL CONCERT in パシフィコ横浜国立大ホール ～さよならの先へ… はじまりのメロディ～"'>
+            <MudTreeViewItem Value='"ClariS 2nd HALL CONCERT in パシフィコ横浜国立大ホール ～さよならの先へ...はじまりのメロディ～"' OnClick="OnClickLiveTitle" />
+            <MudTreeViewItem Value='"ClariS 3rd HALL CONCERT in 舞浜アンフィシアター ♪over the rainbow ～虹の彼方に～♬"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithId( 10 ))' />
+                <MudTreeViewItem Value='"2日目・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 11 ))' />
+                <MudTreeViewItem Value='"2日目・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 12 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS 3rd HALL CONCERT in 舞浜アンフィシアター ♪over the rainbow ～虹の彼方に～♫"'>
+            <MudTreeViewItem Value='"ClariS 2nd Zepp Tour in 東名阪 ～Best of ClariS～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"Zepp Osaka Bayside（大阪府）"' OnClick='@(args => OnClickLiveTitleWithId( 13 ))' />
+                <MudTreeViewItem Value='"Zepp Nagoya（愛知県）"' OnClick='@(args => OnClickLiveTitleWithId( 14 ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・1日目"' OnClick='@(args => OnClickLiveTitleWithId( 15 ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・2日目"' OnClick='@(args => OnClickLiveTitleWithId( 16 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS 2nd Zepp Tour in 東名阪 ～Best of ClariS～"'>
+            <MudTreeViewItem Value='"ClariS 1st HALL CONCERT TOUR ～Fairy Party～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"三郷市文化会館大ホール（埼玉県）"' OnClick='@(args => OnClickLiveTitleWithId( 17 ))' />
+                <MudTreeViewItem Value='"昭和女子大学人見記念講堂（東京都）・1日目"' OnClick='@(args => OnClickLiveTitleWithId( 18))' />
+                <MudTreeViewItem Value='"昭和女子大学人見記念講堂（東京都）・2日目・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 19 ))' />
+                <MudTreeViewItem Value='"昭和女子大学人見記念講堂（東京都）・2日目・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 20 ))' />
+                <MudTreeViewItem Value='"NHK大阪ホール（大阪府）"' OnClick='@(args => OnClickLiveTitleWithId( 21 ))' />
+                <MudTreeViewItem Value='"中野サンプラザ（東京都）"' OnClick='@(args => OnClickLiveTitleWithId( 22 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS 1st HALL CONCERT TOUR ～Fairy Party～"'>
+            <MudTreeViewItem Value='"ClariS LIVE Tour 2019 ～libero～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"仙台PIT（宮城県）"' OnClick='@(args => OnClickLiveTitleWithId( 23 ))' />
+                <MudTreeViewItem Value='"Zepp Nagoya（愛知県）"' OnClick='@(args => OnClickLiveTitleWithId( 24 ))' />
+                <MudTreeViewItem Value='"Zepp Namba（大阪府）"' OnClick='@(args => OnClickLiveTitleWithId( 25 ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・1日目"' OnClick='@(args => OnClickLiveTitleWithId( 26 ))' />
+                <MudTreeViewItem Value='"Zepp Tokyo（東京都）・2日目"' OnClick='@(args => OnClickLiveTitleWithId( 27 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS LIVE Tour 2019 ～libero～"'>
+            <MudTreeViewItem Value='"ClariS 10th Anniversary Precious LIVE ～Gift～"' OnClick="OnClickLiveTitle" />
+            <MudTreeViewItem Value='"Merry ClarismaS ～ひみつのサンタクロース～"' OnClick="OnClickLiveTitle" />
+            <MudTreeViewItem Value='"ClariS HALL CONCERT 2022 ～Twinkle Summer Dreams～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"LINE CUBE SHIBUYA（東京都）・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 30 ))' />
+                <MudTreeViewItem Value='"LINE CUBE SHIBUYA（東京都）・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 31 ))' />
+                <MudTreeViewItem Value='"神奈川県民ホール（神奈川県）"' OnClick='@(args => OnClickLiveTitleWithId( 32 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS 10th Anniversary Precious LIVE ～Gift～"'>
+            <MudTreeViewItem Value='"ClariS HALL CONCERT 2022 WINTER ～Let’s Snow Parade!～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithId( 33 ))' />
+                <MudTreeViewItem Value='"2日目・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 34 ))' />
+                <MudTreeViewItem Value='"2日目・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 35 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"Merry ClarismaS ～ひみつのサンタクロース～"'>
+            <MudTreeViewItem Value='"ClariS Spring LIVE 2023 ～Neo Sparkle～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithId( 36 ))' />
+                <MudTreeViewItem Value='"2日目"' OnClick='@(args => OnClickLiveTitleWithId( 37 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS HALL CONCERT 2022 ～Twinkle Summer Dreams～"'>
+            <MudTreeViewItem Value='"ClariS Autumn Live 2023 ～Arcanum～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"1日目"' OnClick='@(args => OnClickLiveTitleWithId( 38 ))' />
+                <MudTreeViewItem Value='"2日目・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 39 ))' />
+                <MudTreeViewItem Value='"2日目・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 40 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS HALL CONCERT 2022 WINTER ～Let’s Snow Parade!～"'>
+            <MudTreeViewItem Value='"ClariS SPRING TOUR 2024 ～Tinctura～"' OnClick="OnClickLiveTitle">
+                <MudTreeViewItem Value='"Zepp Osaka Bayside（大阪府）"' OnClick='@(args => OnClickLiveTitleWithId( 41 ))' />
+                <MudTreeViewItem Value='"広島クラブクアトロ（広島県）"' OnClick='@(args => OnClickLiveTitleWithId( 42 ))' />
+                <MudTreeViewItem Value='"TOKYO DOME CITY HALL(東京都）・1日目・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 44 ))' />
+                <MudTreeViewItem Value='"TOKYO DOME CITY HALL(東京都）・1日目・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 45 ))' />
+                <MudTreeViewItem Value='"TOKYO DOME CITY HALL(東京都）・2日目・昼公演"' OnClick='@(args => OnClickLiveTitleWithId( 46 ))' />
+                <MudTreeViewItem Value='"TOKYO DOME CITY HALL(東京都）・2日目・夜公演"' OnClick='@(args => OnClickLiveTitleWithId( 47 ))' />
             </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS Spring LIVE 2023 ～Neo Sparkle～"'>
-            </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS Autumn Live 2023 ～Arcanum～"'>
-            </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS SPRING TOUR 2024 ～Tinctura～"'>
-            </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS Room Party ～Rhythm～"'>
-            </MudTreeViewItem>
-            <MudTreeViewItem Value='"ClariS AUTUMN TOUR 2024 ～Via Fortuna～"'>
+            <MudTreeViewItem Value='"ClariS Room Party ～Rhythm～"' OnClick="OnClickLiveTitle" />
+            <MudTreeViewItem Value='"ClariS AUTUMN TOUR 2024 ～Via Fortuna～"' OnClick="OnClickLiveTitle">
             </MudTreeViewItem>
         </MudTreeView>
     </main>
@@ -59,6 +90,13 @@
     {
         List<ClariSLiveSetList.Shared.Models.LiveData>? livedata
         = LiveManager.GetLiveData(SelectedValue);
+        OnLiveDataChangeEventCallback.InvokeAsync(livedata);
+    }
+
+    private void OnClickLiveTitleWithId( int id )
+    {
+        List<ClariSLiveSetList.Shared.Models.LiveData>? livedata
+        = LiveManager.GetLiveData( id );
         OnLiveDataChangeEventCallback.InvokeAsync(livedata);
     }
 
