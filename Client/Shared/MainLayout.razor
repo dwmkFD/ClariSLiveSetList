@@ -22,6 +22,10 @@
                             <MudItem lg="7" xs="7">
                                 <MudAutocomplete T="string" Label="曲名で検索" SearchFunc="@search_title" CoerceText="false" Variant="Variant.Outlined" Margin="Margin.Dense" ValueChanged="OnTitleSelected" />
                             </MudItem>
+                            <MudItem lg="5" xs="5"><MudSpacer></MudSpacer></MudItem>
+                            <MudItem lg="7" xs="7">
+                                <MudDateRangePicker Label="日付で検索" DateFormat="yyyy/MM/dd" DateRangeChanged="OnDateRangeSelected" />
+                            </MudItem>
                         </MudGrid>
                     </MudItem>
 
@@ -96,6 +100,24 @@
 
         count_title_flg = true;
         count_result = name + "：" + ( data == null ? 0 : data.Count ) + " / " + LiveManager.GetLiveListSize() + "回（" + LiveManager.GetSongRanking( name ) + " 位）";
+    }
+
+    private void OnDateRangeSelected( DateRange dr )
+    {
+        var data = LiveManager.GetLiveList( dr );
+        if ( data != null )
+        {
+            CreateSetList( data );
+        }
+        else
+        {
+            foreach ( var l in setlist_all )
+            {
+                l.Clear();
+            }
+            setlist_all.Clear();
+            headings.Clear();
+        }
     }
 
     private void CreateSetList(List<ClariSLiveSetList.Shared.Models.LiveData> data)

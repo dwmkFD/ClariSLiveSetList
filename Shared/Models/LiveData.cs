@@ -139,6 +139,19 @@ namespace ClariSLiveSetList.Shared.Models
             return ( retval.Count == 0 ? null : retval );
         }
 
+        public List<LiveData>? GetLiveList( DateRange dr )
+        {
+            List<LiveData> retval = new List<LiveData>();
+            foreach( LiveData data in LiveList )
+            {
+                if ( dr.Start <= data.Date && data.Date <= dr.End )
+                {
+                    retval.Add( data );
+                }
+            }
+            return ( retval.Count == 0 ? null : retval );
+        }
+
         public int GetLiveListSize()
         {
             return ( LiveList.Count );
