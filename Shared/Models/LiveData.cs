@@ -57,17 +57,17 @@ namespace ClariSLiveSetList.Shared.Models
         {
             foreach ( string sl in SetList )
             {
-                if ( title == sl )
+                if ( sl.Contains( title ) )
                     return ( true );
             }
             foreach ( string sl in SetListEncore )
             {
-                if ( title == sl )
+                if ( sl.Contains( title ) )
                     return ( true );
             }
             foreach ( string sl in SetListDoubleEncore )
             {
-                if ( title == sl )
+                if ( sl.Contains( title ) )
                     return ( true );
             }
 
@@ -78,6 +78,7 @@ namespace ClariSLiveSetList.Shared.Models
     public class LiveDataManager
     {
         private List<LiveData> LiveList = new List<LiveData>();
+        private Dictionary<string, int> SingCount = new Dictionary<string, int>();
 
         public List<LiveData>? GetLiveData( int id )
         {
@@ -138,6 +139,42 @@ namespace ClariSLiveSetList.Shared.Models
             return ( retval.Count == 0 ? null : retval );
         }
 
+        public int GetLiveListSize()
+        {
+            return ( LiveList.Count );
+        }
+
+        public int GetSongRanking( string title )
+        {
+            int rank = 1, prev = -1;
+            Dictionary<int, List<string>> transdict = new Dictionary<int, List<string>>();
+            foreach( var v in SingCount )
+            {
+                if ( transdict.TryAdd( v.Value, new List<string>() ) )
+                {
+                    transdict[v.Value].Add( v.Key );
+                }
+                else
+                {
+                    transdict[v.Value].Add( v.Key );
+                }
+            }
+            var a = transdict.OrderByDescending( ( x ) => x.Key ).ToArray();
+            int count = 0;
+            for ( int i = 0; i < a.Count(); ++i )
+            {
+                if ( a[i].Value.Contains( title ) )
+                {
+                    return ( count + 1 );
+                }
+                else
+                {
+                    count += a[i].Value.Count;
+                }
+            }
+            return ( count );
+        }
+
         public LiveDataManager()
         {
             LiveList.Add( new LiveData(  1, "ClariS 1st Live ～扉の先へ～", "Zepp Tokyo（東京都）", new DateTime( 2015, 7, 31), "", "reunion", "Clear Sky", "irony", "border", "CLICK", "STEP", "Reflect", "アネモネ", "YUMENOKI", "pastel", "Wake Up", "rainy day", "nexus", "ナイショの話", "ルミナス", "眠り姫", "コイノミ", "encore", "カラフル", "double_encore", "コネクト" ) );
@@ -187,6 +224,37 @@ namespace ClariSLiveSetList.Shared.Models
             LiveList.Add( new LiveData( 45, "ClariS SPRING TOUR 2024 ～Tinctura～", "TOKYO DOME CITY HALL(東京都）", new DateTime(2024, 06, 01, 18, 0, 0), "", "reunion", "ヒトリゴト", "アンダンテ", "Love is Mystery", "擬態", "Freaky Candy", "Masquerade", "ループ", "ミントガム（メドレー）", "graduation（メドレー）", "Bye-Bye Butterfly（メドレー）", "サクラ・インカーネーション（メドレー）", "カラフル（クララソロ）", "アネモネ（カレンソロ）", "ALIVE", "トワイライト", "SHIORI", "未来航路", "Wonder Night", "アサガオ", "一期一会", "Blue Canvas", "ふぉりら", "コネクト", "encore", "Prism", "border", "second story" ) );
             LiveList.Add( new LiveData( 46, "ClariS SPRING TOUR 2024 ～Tinctura～", "TOKYO DOME CITY HALL(東京都）", new DateTime(2024, 06, 02, 13, 0, 0), "", "reunion", "ヒトリゴト", "アンダンテ", "Love is Mystery", "擬態", "Freaky Candy", "Masquerade", "新世界ビーナス", "ハルラ（メドレー）", "桜咲く（メドレー）", "恋待ちかぐや（メドレー）", "サクラ・インカーネーション（メドレー）", "カラフル（クララソロ）", "アネモネ（カレンソロ）", "ALIVE", "トワイライト", "SHIORI", "未来航路", "Wonder Night", "アサガオ", "一期一会", "Blue Canvas", "CLICK", "ユニゾン", "encore", "Prism", "border", "イロドリ" ) );
             LiveList.Add( new LiveData( 47, "ClariS SPRING TOUR 2024 ～Tinctura～", "TOKYO DOME CITY HALL(東京都）", new DateTime(2024, 06, 02, 18, 0, 0), "", "reunion", "ヒトリゴト", "アンダンテ", "Love is Mystery", "擬態", "Freaky Candy", "Masquerade", "ループ", "ミントガム（メドレー）", "graduation（メドレー）", "Bye-Bye Butterfly（メドレー）", "サクラ・インカーネーション（メドレー）", "カラフル（クララソロ）", "アネモネ（カレンソロ）", "ALIVE", "トワイライト", "SHIORI", "未来航路", "Wonder Night", "アサガオ", "一期一会", "Blue Canvas", "ふぉりら", "コネクト", "encore", "Prism", "border", "second story" ) );
+
+            foreach( var list in LiveList )
+            {
+                foreach ( var sl in list.SetList )
+                {
+                    string tmp = sl;
+                    if ( tmp.Contains( "（" ) )
+                        tmp = tmp.Split( "（" )[0];
+
+                    if ( SingCount.TryAdd( tmp, 1 ) == false )
+                        SingCount[tmp]++;
+                }
+                foreach( var sl in list.SetListEncore )
+                {
+                    string tmp = sl;
+                    if ( tmp.Contains( "（" ) )
+                        tmp = tmp.Split( "（" )[0];
+
+                    if ( SingCount.TryAdd( tmp, 1 ) == false )
+                        SingCount[tmp]++;
+                }
+                foreach ( var sl in list.SetListDoubleEncore )
+                {
+                    string tmp = sl;
+                    if ( tmp.Contains( "（" ) )
+                        tmp = tmp.Split( "（" )[0];
+
+                    if ( SingCount.TryAdd( tmp, 1 ) == false )
+                        SingCount[tmp]++;
+                }
+            }
         }
     }
 

@@ -29,6 +29,10 @@
                         <LiveList OnLiveDataChangeEventCallback="@( (x) => CreateSetList( x ) )" LiveManager="LiveManager" />
                     </MudItem>
                     <MudItem xs="9">
+                        @if ( count_title_flg )
+                        {
+                            <MudText>@count_result</MudText>
+                        }
                         <MudSimpleTable>
                             <thead>
                                 @foreach( var h in headings )
@@ -72,20 +76,34 @@
     List<string> headings = new List<string>();
     private List<List<string>> setlist_all = new List<List<string>>();
 
+    private bool count_title_flg = false;
+    private string count_result = "";
+
     private void OnTitleSelected( string name ) // 曲名が入力(検索)された
     {
         var data = LiveManager.GetLiveList( name ); // nameを歌ったライブを検索
-        CreateSetList( data );
-    }
+        if ( data != null )
+            CreateSetList( data );
+        else
+        {
+            foreach ( var l in setlist_all )
+            {
+                l.Clear();
+            }
+            setlist_all.Clear();
+            headings.Clear();
+        }
 
-    private void OnLiveTitleSelected( string title ) // ライブタイトルが選択された
-    {
+        count_title_flg = true;
+        count_result = name + "：" + ( data == null ? 0 : data.Count ) + " / " + LiveManager.GetLiveListSize() + "回（" + LiveManager.GetSongRanking( name ) + " 位）";
     }
 
     private void CreateSetList(List<ClariSLiveSetList.Shared.Models.LiveData> data)
     {
         List<string> setlist_count = new List<string>();
         int setlist_max = 0, encore_max = 0, dblencore_max = 0;
+
+        count_title_flg = false;
 
         foreach( var l in setlist_all )
         {
