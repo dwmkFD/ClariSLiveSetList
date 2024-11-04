@@ -29,7 +29,6 @@
                         <LiveList OnLiveDataChangeEventCallback="@( (x) => CreateSetList( x ) )" LiveManager="LiveManager" />
                     </MudItem>
                     <MudItem xs="9">
-                        <MudText>@setlist_all</MudText>
                         <MudSimpleTable>
                             <thead>
                                 @foreach( var h in headings )
@@ -38,9 +37,14 @@
                                 }
                             </thead>
                             <tbody>
-                                @foreach( var row in TitleList )
+                                @for ( int i = 0; i < setlist_max_num; ++i )
                                 {
-                                    
+                                    <tr>
+                                        @foreach( var row in setlist_all )
+                                        {
+                                            <td>@row[i]</td>
+                                        }
+                                    </tr>
                                 }
                             </tbody>
                         </MudSimpleTable>
@@ -64,13 +68,14 @@
 
     ClariSLiveSetList.Shared.Models.LiveDataManager LiveManager = new ClariSLiveSetList.Shared.Models.LiveDataManager();
 
-    string[] headings = { "曲順", "曲名", "備考" };
-    private string setlist_all = "";
-    private List<ClariSLiveSetList.Shared.Models.LiveData>? livedata = null;
+    int setlist_max_num = 0;
+    List<string> headings = new List<string>();
+    private List<List<string>> setlist_all = new List<List<string>>();
 
     private void OnTitleSelected( string name ) // 曲名が入力(検索)された
     {
         var data = LiveManager.GetLiveList( name ); // nameを歌ったライブを検索
+        CreateSetList( data );
     }
 
     private void OnLiveTitleSelected( string title ) // ライブタイトルが選択された
@@ -79,16 +84,83 @@
 
     private void CreateSetList(List<ClariSLiveSetList.Shared.Models.LiveData> data)
     {
-        livedata = data;
-        string tmp = "";
-        foreach( var l in data )
+        List<string> setlist_count = new List<string>();
+        int setlist_max = 0, encore_max = 0, dblencore_max = 0;
+
+        foreach( var l in setlist_all )
         {
-            foreach( var sl in l.SetList )
+            l.Clear();
+        }
+        setlist_all.Clear();
+        headings.Clear();
+
+        headings.Add( "曲順" );
+        foreach ( var l in data )
+        {
+            headings.Add( l.Title + "＠" + l.Place );
+            setlist_all.Add( new List<string>() );
+            setlist_max = Math.Max( setlist_max, l.SetList.Count );
+            encore_max = Math.Max( encore_max, l.SetListEncore.Count );
+            dblencore_max = Math.Max( dblencore_max, l.SetListDoubleEncore.Count );
+            setlist_max_num = setlist_max + encore_max + dblencore_max;
+        }
+        setlist_all.Add( new List<string>() ); // 曲順表示のためにリスト追加
+        for ( int i = 1; i <= setlist_max; ++i )
+        {
+            setlist_count.Add( i.ToString() );
+        }
+        for ( int i = 1; i <= encore_max; ++i )
+        {
+            setlist_count.Add( "EN" + i.ToString() );
+        }
+        for ( int i = 1; i <= dblencore_max; ++i )
+        {
+            setlist_count.Add( "DEN" + i.ToString() );
+        }
+        setlist_all[0] = setlist_count;
+
+        for ( int count = 0; count < setlist_max; ++count )
+        {
+            for ( int idx = 0; idx < data.Count; ++idx )
             {
-                tmp += sl;
+                if ( count < data[idx].SetList.Count )
+                {
+                    setlist_all[idx + 1].Add( data[idx].SetList[count] );
+                }
+                else
+                {
+                    setlist_all[idx + 1].Add( "" );
+                }
             }
         }
-        setlist_all = tmp;
+        for ( int count = 0; count < encore_max; ++count )
+        {
+            for ( int idx = 0; idx < data.Count; ++idx )
+            {
+                if ( count < data[idx].SetListEncore.Count )
+                {
+                    setlist_all[idx + 1].Add( data[idx].SetListEncore[count] );
+                }
+                else
+                {
+                    setlist_all[idx + 1].Add( "" );
+                }
+            }
+        }
+        for ( int count = 0; count < dblencore_max; ++count )
+        {
+            for ( int idx = 0; idx < data.Count; ++idx )
+            {
+                if ( count < data[idx].SetListDoubleEncore.Count )
+                {
+                    setlist_all[idx + 1].Add( data[idx].SetListDoubleEncore[count] );
+                }
+                else
+                {
+                    setlist_all[idx + 1].Add( "" );
+                }
+            }
+        }
     }
 
     protected override void OnInitialized()
