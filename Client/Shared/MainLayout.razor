@@ -26,6 +26,14 @@
                             <MudItem lg="7" xs="7">
                                 <MudDateRangePicker Label="日付で検索" DateFormat="yyyy/MM/dd" DateRangeChanged="OnDateRangeSelected" />
                             </MudItem>
+                            <MudItem lg="5" xs="5"><MudSpacer></MudSpacer></MudItem>
+                            <MudItem lg="3" xs="3">
+                                <MudTextField @bind-Value="min_rank_value" Label="この順位から" Variant="Variant.Outlined" TextChanged="OnRankingTextChanged" />
+                            </MudItem>
+                            <MudItem lg="1" xs="1"><MudText Align="Align.Center" Style="vertical-align: middle" Typo="Typo.h3">→</MudText></MudItem>
+                            <MudItem lg="3" xs="3">
+                                <MudTextField @bind-Value="max_rank_value" Label="この順位まで検索" Variant="Variant.Outlined" TextChanged="OnRankingTextChanged" />
+                            </MudItem>
                         </MudGrid>
                     </MudItem>
 
@@ -45,6 +53,8 @@
                                 }
                             </thead>
                             <tbody>
+                            @if ( print_ranking_flg == false )
+                            {
                                 @for ( int i = 0; i < setlist_max_num; ++i )
                                 {
                                     <tr>
@@ -54,6 +64,16 @@
                                         }
                                     </tr>
                                 }
+                            }
+                            else if ( ranklist != null )
+                            {
+                                @foreach ( var rl in ranklist )
+                                {
+                                    <tr>
+                                        <td>@rl.Item1</td><td>@rl.Item2</td><td>@rl.Item3</td>
+                                    </tr>
+                                }
+                            }
                             </tbody>
                         </MudSimpleTable>
                     </MudItem>
@@ -83,6 +103,10 @@
     private bool count_title_flg = false;
     private string count_result = "";
 
+    private int min_rank_value = 0, max_rank_value = 0;
+    private bool print_ranking_flg = false;
+    private List<Tuple<int, string, int>>? ranklist = null;
+
     private void OnTitleSelected( string name ) // 曲名が入力(検索)された
     {
         var data = LiveManager.GetLiveList( name ); // nameを歌ったライブを検索
@@ -99,6 +123,7 @@
         }
 
         count_title_flg = true;
+        print_ranking_flg = false;
         count_result = name + "：" + ( data == null ? 0 : data.Count ) + " / " + LiveManager.GetLiveListSize() + "回（" + LiveManager.GetSongRanking( name ) + " 位）";
     }
 
@@ -120,12 +145,30 @@
         }
     }
 
+    private void OnRankingTextChanged()
+    {
+        if (min_rank_value != 0 && max_rank_value != 0)
+        {
+            count_title_flg = false;
+            print_ranking_flg = true;
+            headings.Clear();
+            headings.Add("順位");
+            headings.Add("曲名");
+            headings.Add("歌唱回数");
+            ranklist = LiveManager.GetSongRankingAll();
+            ranklist = ranklist.Where((x) => x.Item1 >= min_rank_value && x.Item1 <= max_rank_value ).ToList();
+        }
+        else
+            ranklist = null;
+    }
+
     private void CreateSetList(List<ClariSLiveSetList.Shared.Models.LiveData> data)
     {
         List<string> setlist_count = new List<string>();
         int setlist_max = 0, encore_max = 0, dblencore_max = 0;
 
         count_title_flg = false;
+        print_ranking_flg = false;
 
         foreach( var l in setlist_all )
         {

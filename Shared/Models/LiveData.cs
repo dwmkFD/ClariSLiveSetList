@@ -159,7 +159,6 @@ namespace ClariSLiveSetList.Shared.Models
 
         public int GetSongRanking( string title )
         {
-            int rank = 1, prev = -1;
             Dictionary<int, List<string>> transdict = new Dictionary<int, List<string>>();
             foreach( var v in SingCount )
             {
@@ -186,6 +185,37 @@ namespace ClariSLiveSetList.Shared.Models
                 }
             }
             return ( count );
+        }
+
+        public List<Tuple<int, string, int>> GetSongRankingAll()
+        {
+            // 順位/曲名/回数の組
+            List<Tuple<int, string, int>> allsong = new List<Tuple<int, string, int>>();
+
+            Dictionary<int, List<string>> transdict = new Dictionary<int, List<string>>();
+            foreach ( var v in SingCount )
+            {
+                if ( transdict.TryAdd( v.Value, new List<string>() ) )
+                {
+                    transdict[v.Value].Add( v.Key );
+                }
+                else
+                {
+                    transdict[v.Value].Add( v.Key );
+                }
+            }
+            var a = transdict.OrderByDescending( ( x ) => x.Key ).ToArray();
+            int count = 0;
+            for ( int i = 0; i < a.Count(); ++i )
+            {
+                foreach ( var aa in a[i].Value )
+                {
+                    allsong.Add( Tuple.Create( count + 1, aa, a[i].Key ) );
+                }
+                count += a[i].Value.Count;
+            }
+
+            return ( allsong );
         }
 
         public LiveDataManager()
