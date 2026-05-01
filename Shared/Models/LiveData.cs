@@ -206,7 +206,7 @@ namespace ClariSLiveSetList.Shared.Models
             }
             var a = transdict.OrderByDescending( ( x ) => x.Key ).ToArray();
             int count = 0;
-            for ( int i = 0; i <= a.Count(); ++i )
+            for ( int i = 0; i < a.Count(); ++i )
             {
                 foreach ( var aa in a[i].Value )
                 {
