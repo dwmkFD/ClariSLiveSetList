@@ -496,8 +496,7 @@ namespace ClariSLiveSetList.Shared.Models
 
             foreach ( var song in TitleList )
             {
-                if ( SingCount[song] == 0 )
-                    SingCount[song] = 0;
+                SingCount.TryAdd( song, 0 );
             }
         }
     }
