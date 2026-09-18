@@ -29,3 +29,30 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: publish/wwwroot
           force_orphan: true
+
+      # --- ここから追加分 ---
+
+      # 直前のコミット情報を取得(件名・投稿者・URL)
+      - name: Get commit info
+        id: commit
+        run: |
+          MESSAGE=$(git log -1 --pretty=%s)
+          AUTHOR=$(git log -1 --pretty=%an)
+          URL="https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
+
+          # JSON文字列として安全に埋め込むためエスケープ
+          echo "message=$(echo "$MESSAGE" | jq -Rsa .)" >> "$GITHUB_OUTPUT"
+          echo "author=$(echo "$AUTHOR" | jq -Rsa .)" >> "$GITHUB_OUTPUT"
+          echo "url=$(echo "$URL" | jq -Rsa .)" >> "$GITHUB_OUTPUT"
+
+      # Discordへ通知
+      - name: Notify Discord
+        env:
+          WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          THREAD_ID: ${{ secrets.DISCORD_THREAD_ID }}
+        run: |
+          curl -X POST "${WEBHOOK_URL}?thread_id=${THREAD_ID}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "content": "**ClariSLiveSetList** デプロイ完了\nby '"${{ steps.commit.outputs.author }}"'\n'"${{ steps.commit.outputs.message }}"'\n'"${{ steps.commit.outputs.url }}"'"
+            }'
