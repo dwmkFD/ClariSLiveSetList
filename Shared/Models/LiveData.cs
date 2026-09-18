@@ -402,6 +402,9 @@ namespace ClariSLiveSetList.Shared.Models
             TitleList.Add( "One more voice" );
             TitleList.Add( "運命" );
             TitleList.Add( "リンクス" );
+            TitleList.Add( "ヒトコト" );
+            TitleList.Add( "KOIYAGURA" );
+            TitleList.Add( "夏の面影" );
         }
 
         public LiveDataManager()
